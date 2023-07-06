@@ -1,14 +1,8 @@
 import { join } from 'path';
-import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
+import AutoLoad from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
-import wellknown from "./routes/well-known";
-
-export type AppOptions = {
-  // Place your custom options for app below here.
-  protocol: string
-  host: string
-} & Partial<AutoloadPluginOptions>;
-
+import {AppOptions} from "./options";
+import routes from "./routes";
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
@@ -35,7 +29,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     options: opts
   })
 
-  fastify.register(wellknown, opts);
+  fastify.register(routes, opts);
 };
 
 export default app;
