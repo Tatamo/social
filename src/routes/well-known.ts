@@ -1,7 +1,7 @@
 import {FastifyPluginAsync} from "fastify"
 import fp from 'fastify-plugin'
 
-const wellKnown: FastifyPluginAsync<{host: string}> = async (fastify, opts): Promise<void> => {
+const wellknown: FastifyPluginAsync<{host: string}> = async (fastify, opts): Promise<void> => {
     fastify.get('/.well-known/nodeinfo', async function (request, reply) {
         return {
             "links": [{
@@ -15,4 +15,4 @@ const wellKnown: FastifyPluginAsync<{host: string}> = async (fastify, opts): Pro
     })
 }
 
-export default fp(wellKnown);
+export default fp(wellknown);

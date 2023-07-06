@@ -1,6 +1,7 @@
 import { join } from 'path';
 import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
+import wellknown from "./routes/well-known";
 
 export type AppOptions = {
   // Place your custom options for app below here.
@@ -32,13 +33,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     options: opts
   })
 
-  // This loads all plugins defined in routes
-  // define your routes in one of these
-  void fastify.register(AutoLoad, {
-    dir: join(__dirname, 'routes'),
-    options: opts
-  })
-
+  fastify.register(wellknown, opts);
 };
 
 export default app;
