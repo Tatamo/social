@@ -4,11 +4,13 @@ import { FastifyPluginAsync } from 'fastify';
 
 export type AppOptions = {
   // Place your custom options for app below here.
+  host: string
 } & Partial<AutoloadPluginOptions>;
 
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
+  host: "localhost"
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
@@ -16,6 +18,9 @@ const app: FastifyPluginAsync<AppOptions> = async (
     opts
 ): Promise<void> => {
   // Place here your custom code!
+
+  // work-around for https://github.com/fastify/fastify-cli/issues/593
+  opts = {...options, ...opts}
 
   // Do not touch the following lines
 
