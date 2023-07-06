@@ -5,13 +5,15 @@ import wellknown from "./routes/well-known";
 
 export type AppOptions = {
   // Place your custom options for app below here.
+  protocol: string
   host: string
 } & Partial<AutoloadPluginOptions>;
 
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
-  host: "localhost"
+  protocol: "",
+  host: "localhost:3000"
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
