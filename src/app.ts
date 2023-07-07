@@ -7,7 +7,8 @@ import routes from "./routes";
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
   protocol: "",
-  host: "localhost:3000"
+  host: "localhost:3000",
+  acctHost: "social.tatamo.dev"
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
