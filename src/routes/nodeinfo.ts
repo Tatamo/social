@@ -24,8 +24,8 @@ const nodeinfo: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
                 "users": {}
             },
             "metadata": {}
-        }
-    })
-}
+        };
+    });
+};
 
 export default fp(nodeinfo);

@@ -28,7 +28,7 @@ const wellknown: FastifyPluginAsync<{
                 "rel": "http://nodeinfo.diaspora.software/ns/schema/2.1",
                 "href": `${opts.protocol}${opts.host}/nodeinfo/2.1`
             }]
-        }
+        };
     });
 
     // https://datatracker.ietf.org/doc/html/rfc6415
@@ -50,7 +50,7 @@ const wellknown: FastifyPluginAsync<{
             reply.code(400);
             return;
         }
-        const [, user, host] = match;
+        const [, name, host] = match;
 
         if (host !== opts.acctHost) {
             reply.code(404);
@@ -58,32 +58,32 @@ const wellknown: FastifyPluginAsync<{
         }
 
         // TODO: check actor
-        if (user !== "tatamo") {
+        if (name !== "tatamo") {
             reply.code(404);
             return;
         }
 
         reply.type("application/jrd+json")
         return {
-            subject: `acct:${user}@${opts.acctHost}`,
+            subject: `acct:${name}@${opts.acctHost}`,
             aliases: [
-                `${opts.protocol}${opts.host}/users/${user}`,
-                `${opts.protocol}${opts.host}/@${user}`
+                `${opts.protocol}${opts.host}/users/${name}`,
+                `${opts.protocol}${opts.host}/@${name}`
             ],
             links: [
                 {
                     rel: "self",
                     type: "application/activity+json",
-                    href: `${opts.protocol}${opts.host}/users/${user}`
+                    href: `${opts.protocol}${opts.host}/users/${name}`
                 },
                 {
                     rel: "http://webfinger.net/rel/profile-page",
                     type: "text/html",
-                    href: `${opts.protocol}${opts.host}/@${user}`
+                    href: `${opts.protocol}${opts.host}/@${name}`
                 }
             ]
-        }
+        };
     });
-}
+};
 
 export default fp(wellknown);
