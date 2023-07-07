@@ -31,6 +31,13 @@ const wellknown: FastifyPluginAsync<{
         }
     });
 
+    // https://datatracker.ietf.org/doc/html/rfc6415
+    fastify.get('/.well-known/host-meta', async function (request, reply) {
+        reply.type("application/xrd+xml");
+        return `<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<XRD xmlns=\"http://docs.oasis-open.org/ns/xri/xrd-1.0\"><Link rel=\"lrdd\" type=\"application/xrd+xml\" template=\"${opts.protocol}${opts.host}/.well-known/webfinger?resource={uri}\"></Link></XRD>`;
+    });
+
     // https://datatracker.ietf.org/doc/html/rfc7033
     // https://datatracker.ietf.org/doc/html/rfc7565
     fastify.get<{
