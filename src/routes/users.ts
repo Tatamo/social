@@ -63,6 +63,22 @@ const wellknown: FastifyPluginAsync<{
         reply.code(405);
         return;
     });
+
+    // https://www.w3.org/TR/activitypub/#outbox
+    fastify.get<{
+        Params: { name: string }
+    }>('/users/:name/outbox', {schema: userSchema}, async function (request, reply) {
+        const {name} = request.params;
+        reply.type("application/activity+json");
+        return {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            type: "OrderedCollection",
+            id: `${opts.protocol}${opts.host}/users/${name}/outbox`,
+            preferredUsername: name,
+            totalItems: 0,
+            orderedItems: [],
+        };
+    });
 };
 
 export default fp(wellknown);
