@@ -37,6 +37,32 @@ const wellknown: FastifyPluginAsync<{
             // icon: [{type: "Image", url: ""}]
         };
     });
+
+    // https://www.w3.org/TR/activitypub/#inbox
+    fastify.get<{
+        Params: { name: string }
+    }>('/users/:name/inbox', {schema: userSchema}, async function (request, reply) {
+        const {name} = request.params;
+        reply.type("application/activity+json");
+        return {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            type: "OrderedCollection",
+            id: `${opts.protocol}${opts.host}/users/${name}/inbox`,
+            preferredUsername: name,
+            totalItems: 0,
+            orderedItems: [],
+        };
+    });
+
+    // https://argrath.github.io/activitypub/#delivery
+    fastify.post<{
+        Params: { name: string }
+    }>('/users/:name/inbox', {schema: userSchema}, async function (request, reply) {
+        // const {name} = request.params;
+        // TODO: implement
+        reply.code(405);
+        return;
+    });
 };
 
 export default fp(wellknown);
