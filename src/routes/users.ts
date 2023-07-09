@@ -1,6 +1,8 @@
 import {FastifyPluginAsync} from "fastify"
 import fp from 'fastify-plugin'
 import {FastifySchema} from "fastify/types/schema";
+import {exportPublicKeyPem, generateUserKeyPair} from "../domain/sign";
+import {cache} from "../datastore/onmemory";
 
 const userSchema: FastifySchema = {
     params: {
@@ -18,12 +20,18 @@ const wellknown: FastifyPluginAsync<{
     protocol: string,
     host: string
 }> = async (fastify, opts): Promise<void> => {
+    if (!cache.has("keypair")) {
+        cache.set("keypair", await generateUserKeyPair());
+    }
+
+    const publicKey = cache.get("keypair")!.publicKey;
+
     // https://www.w3.org/TR/activitypub/#actor-objects
     fastify.get<{ Params: { name: string } }>('/users/:name', {schema: userSchema}, async function (request, reply) {
         const {name} = request.params;
         reply.type("application/activity+json");
         return {
-            "@context": "https://www.w3.org/ns/activitystreams",
+            "@context": ["https://www.w3.org/ns/activitystreams", "https://w3id.org/security/v1"],
             type: "Person",
             id: `${opts.protocol}${opts.host}/users/${name}`,
             preferredUsername: name,
@@ -35,6 +43,11 @@ const wellknown: FastifyPluginAsync<{
             inbox: `${opts.protocol}${opts.host}/users/${name}/inbox`,
             outbox: `${opts.protocol}${opts.host}/users/${name}/outbox`,
             // icon: [{type: "Image", url: ""}]
+            publicKey: {
+                id: `${opts.protocol}${opts.host}/users/${name}#main-key`,
+                owner: `${opts.protocol}${opts.host}/users/${name}`,
+                publicKeyPem: await exportPublicKeyPem(publicKey)
+            }
         };
     });
 

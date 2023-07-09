@@ -22,6 +22,12 @@ export async function generateUserKeyPair(): Promise<import("node:crypto").webcr
     }, true, ["verify", "sign"]);
 }
 
+export async function exportPublicKeyPem(publicKey: import("node:crypto").webcrypto.CryptoKey): Promise<string> {
+    return `-----BEGIN PUBLIC KEY-----
+${Buffer.from(await crypto.subtle.exportKey("spki", publicKey)).toString("base64")}
+-----END PUBLIC KEY-----`;
+}
+
 const signHeaders = {
     GET: [
         "(request-target)",
