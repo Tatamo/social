@@ -2,7 +2,7 @@ import { join } from 'path';
 import AutoLoad from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
 import {AppOptions} from "./options";
-import routes from "./routes";
+import routes from "./route";
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {

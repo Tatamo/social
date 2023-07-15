@@ -1,6 +1,6 @@
 import { test } from 'tap'
 import Fastify from 'fastify'
-import Support from '../../src/plugins/support'
+import Support from '../../src/plugin/support'
 
 test('support works standalone', async (t) => {
   const fastify = Fastify()
