@@ -1,5 +1,6 @@
 import {User} from "./user";
 import {Image} from "./image";
+import {Note} from "./note";
 
 export type NestedActivityStreamObject<T> = Omit<T, "@context">;
 
@@ -92,5 +93,38 @@ export function ActivityStreamImageFromDomainObject(image: Image, opts: {
         name: image.name,
         url: image.url,
         sensitive: image.sensitive
+    };
+}
+
+export type ActivityStreamNote = {
+    "@context": ActivityStreamContext;
+    type: "Note";
+    id: string;
+    attributedTo: string;
+    to: string | Array<string>;
+    content: string;
+    source?: {
+        content: string;
+        mediaType: string;
+    }
+}
+
+export function ActivityStreamNoteFromDomainObject(note: Note, opts: {
+    protocol: string,
+    host: string
+}): ActivityStreamNote {
+    return {
+        "@context": [
+            "https://www.w3.org/ns/activitystreams",
+            "https://w3id.org/security/v1",
+            {
+                "@language": note.language
+            }
+        ],
+        id: `${opts.protocol}${opts.host}/notes/note.id`,
+        type: "Note",
+        attributedTo: note.from,
+        to: note.to,
+        content: note.content,
     };
 }
