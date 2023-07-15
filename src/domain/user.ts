@@ -1,5 +1,3 @@
-import {exportPublicKeyPem} from "./sign";
-
 export type User = {
     /**
      * unique, not changeable string and same as the userpart of the `acct` URL
@@ -11,6 +9,8 @@ export type User = {
      * same as `name` member in Actor
      */
     displayName: string;
+
+    language: string;
 
     summary: string;
 
