@@ -16,7 +16,7 @@ const userSchema: FastifySchema = {
         }
     }
 };
-const wellknown: FastifyPluginAsync<{
+const users: FastifyPluginAsync<{
     protocol: string,
     host: string
 }> = async (fastify, opts): Promise<void> => {
@@ -94,4 +94,4 @@ const wellknown: FastifyPluginAsync<{
     });
 };
 
-export default fp(wellknown);
+export default fp(users);

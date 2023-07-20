@@ -2,13 +2,21 @@ import { join } from 'path';
 import AutoLoad from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
 import {AppOptions} from "./options";
+import sensible from "./plugin/sensible"
+import injectRepositories from "./plugin/repository"
 import routes from "./route";
+import {Repositories} from "./repository";
+import UserRepository from "./repository/user";
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
   protocol: "",
   host: "localhost:3000",
   acctHost: "social.tatamo.dev"
+}
+
+const repositories: Repositories = {
+  userRepository: new UserRepository()
 }
 
 const app: FastifyPluginAsync<AppOptions> = async (
@@ -30,6 +38,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
     options: opts
   })
 
+  // load plugins
+  fastify.register(sensible, opts);
+  fastify.register(injectRepositories(repositories), opts);
+
+  // register routes
   fastify.register(routes, opts);
 };
 
