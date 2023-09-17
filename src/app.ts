@@ -2,7 +2,6 @@ import { join } from 'path';
 import AutoLoad from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
 import {AppOptions} from "./options";
-import sensible from "./plugin/sensible"
 import injectRepositories from "./plugin/repository"
 import routes from "./route";
 import {Repositories} from "./repository";
@@ -39,7 +38,6 @@ const app: FastifyPluginAsync<AppOptions> = async (
   })
 
   // load plugins
-  fastify.register(sensible, opts);
   fastify.register(injectRepositories(repositories), opts);
 
   // register routes
